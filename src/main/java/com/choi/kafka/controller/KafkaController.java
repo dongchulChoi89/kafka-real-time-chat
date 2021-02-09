@@ -1,31 +1,26 @@
 package com.choi.kafka.controller;
 
-import com.choi.kafka.consumer.MyTopicConsumer;
+import com.choi.kafka.constant.KafkaConstants;
+import com.choi.kafka.model.Message;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
 // this endpoint injects the KafkaTemplate configured earlier and sends a message to myTopic when a GET request is made to /kafka/produce
 @RestController
 public class KafkaController {
-    private KafkaTemplate<String, String> template;
-    private MyTopicConsumer myTopicConsumer;
+    @Autowired
+    private KafkaTemplate<String, Message> template;
 
-    public KafkaController(KafkaTemplate<String, String> template, MyTopicConsumer myTopicConsumer) {
-        this.template = template;
-        this.myTopicConsumer = myTopicConsumer;
-    }
-
-    @GetMapping("/kafka/produce")
-    public void produce(@RequestParam String message) {
-        template.send("myTopic", message);
-    }
-
-    @GetMapping("/kafka/messages")
-    public List<String> getMessages() {
-        return myTopicConsumer.getMessages();
+    @PostMapping(value = "/api/send", consumes = "application/json", produces = "application/json")
+    public void sendMessage(@RequestBody Message message) {
+        message.setTimestamp(LocalDateTime.now().toString());
+        try {
+            template.send(KafkaConstants.KAFKA_TOPIC, message).get();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }
