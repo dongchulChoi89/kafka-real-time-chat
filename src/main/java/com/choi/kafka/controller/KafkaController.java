@@ -1,6 +1,6 @@
 package com.choi.kafka.controller;
 
-import com.choi.kafka.controller.MyTopicConsumer;
+import com.choi.kafka.consumer.MyTopicConsumer;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;

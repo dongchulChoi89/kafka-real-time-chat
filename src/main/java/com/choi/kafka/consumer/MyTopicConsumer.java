@@ -1,4 +1,4 @@
-package com.choi.kafka.controller;
+package com.choi.kafka.consumer;
 
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
