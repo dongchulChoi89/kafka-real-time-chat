@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 // This listner class listens to changes inside the 'kafka-chat' topic.
 // It does so by using the KafkaListener annotation.
-// template.convertAndSend will convert(serialize) the message and send that to WebSocket topic
+// Using SimpMessagingTemplate, you can send messages directly from any component of application to brokerChannel
 @Component // register this class object to bean; my defined class using @Component, else using @Configuration, and @Bean
 public class MessageListener {
     @Autowired
@@ -19,6 +19,6 @@ public class MessageListener {
     @KafkaListener(topics = KafkaConstants.KAFKA_TOPIC, groupId = KafkaConstants.GROUP_ID)
     public void listen(Message message) {
         System.out.println("sending via kafka listener..");
-        template.convertAndSend("/topic/group", message); // send the message from Kafka to the destination of websocket
+        template.convertAndSend("/topic/group", message);
     }
 }

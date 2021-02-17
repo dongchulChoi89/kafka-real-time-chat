@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 
-// this endpoint injects the KafkaTemplate configured earlier and sends a message to myTopic when a GET request is made to /kafka/produce
 @RestController
 public class KafkaController {
     @Autowired
@@ -29,22 +28,14 @@ public class KafkaController {
         }
     }
 
-    // Websocket
-    // Annotation for mapping a Message onto a message-handling method by matching the declared patterns to a destination extracted from the message.
-    // STOMP over WebSocket -- the value is turned into a message and sent to a default response destination or to a custom destination specified with an @SendTo
-    @MessageMapping("/sendMessage")
+/*
+    // STOMP over Websocket
+    // the returned value is turned into a Spring message and sent to a default response destination(/topic/[@MessageMapping end point])
+    // or to a custom destination specified with an @SendTo
+    @MessageMapping("/sendMessage") // client send SEND STOMP message
     @SendTo("/topic/group")
     public Message broadcastGroupMessage(@Payload Message message) {
         return message; // send this message to all the subscribers
     }
-
-    @MessageMapping("/newUser")
-    @SendTo("/topic/group")
-    public Message addUser(@Payload Message message,
-                           SimpMessageHeaderAccessor headerAccessor) {
-        // Add user in web socket session
-        headerAccessor.getSessionAttributes().put("username", message.getSender());
-        return message;
-    }
-
+*/
 }

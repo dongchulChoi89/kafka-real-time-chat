@@ -7,17 +7,16 @@ import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 
 @Configuration
-@EnableWebSocketMessageBroker
+@EnableWebSocketMessageBroker // make WebSocket application to become a STOMP broker for connected STOMP clients
 public class WebSocketConfiguration implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        // endpoint for chat client
-        registry.addEndpoint("/ws-chat").setAllowedOriginPatterns("*").withSockJS();
+        registry.addEndpoint("/ws-chat").setAllowedOriginPatterns("*").withSockJS(); // webSocket(sockJS) endpoint for chat client
     }
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
-        registry.setApplicationDestinationPrefixes("/app");
-        registry.enableSimpleBroker("/topic");
+        registry.setApplicationDestinationPrefixes("/app"); // STOMP message(STOMP frame) whose destination begins with '/app' goes to @MessageMapping method in @Controller class
+        registry.enableSimpleBroker("/topic"); // STOMP message(STOMP frame) whose destination begins with 'topic' goes to built-in message broker for subscriptions and broadcasting
     }
 }
